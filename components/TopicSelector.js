@@ -1,4 +1,4 @@
-'use client';
+use client';
 
 import { useState } from 'react';
 
@@ -18,7 +18,7 @@ export default function TopicSelector() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-purple-500 text-white font-semibold py-2 px-4 rounded-full shadow-lg flex items-center space-x-2 transition-colors hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+        className="bg-indigo-500 text-white font-semibold py-2 px-4 rounded-full shadow-lg flex items-center space-x-2 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
       >
         <span>{selectedTopic}</span>
         <svg
