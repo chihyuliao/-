@@ -195,14 +195,6 @@ export default function Home() {
         }`}
       >
         <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-end mb-8">
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className="text-2xl text-slate-500 hover:text-indigo-600 focus:outline-none transition-colors"
-            >
-              ✕
-            </button>
-          </div>
           <h2 className="text-2xl font-bold text-slate-800 mb-6">選單</h2>
           <ul className="space-y-4">
             <li>
