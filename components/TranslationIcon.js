@@ -1,10 +1,8 @@
-// File: components/TranslationIcon.js
-// 這是翻譯圖示元件，當點擊時會觸發主頁面上的翻譯功能
 export default function TranslationIcon({ onClick }) {
   return (
     <button
       onClick={onClick}
-      className="bg-purple-500 p-2 rounded-full shadow-lg transform hover:scale-110 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400"
+      className="bg-indigo-500 p-2 rounded-full shadow-lg transform hover:scale-110 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,4 +20,3 @@ export default function TranslationIcon({ onClick }) {
       </svg>
     </button>
   );
-}
