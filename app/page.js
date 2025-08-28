@@ -212,7 +212,7 @@ export default function Home() {
               點擊下方連結，前往 AI SPEAKING 網站進行練習。
             </p>
             <a
-              href="https://example.com/ai-speaking" // 此處為模擬網址，請替換成實際網址
+              href="https://github.com/chihyuliao/AI-SPEAKING.git" // 此處為模擬網址，請替換成實際網址
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition-colors duration-300 shadow-md hover:shadow-lg"
