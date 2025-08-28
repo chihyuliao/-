@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import TranslationIcon from '../components/TranslationIcon';
-import TopicSelector from '../components/TopicSelector';
 
 // 主頁面元件
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSpeakingModalOpen, setIsSpeakingModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState('日常英語');
+
+  const topics = ['日常英語', '多益', '英檢', '雅思'];
 
   // 處理點擊說的功能
   const handleSpeakingClick = () => {
@@ -23,10 +24,59 @@ export default function Home() {
     }
   };
 
+  const handleTopicSelect = (topic) => {
+    setSelectedTopic(topic);
+    setIsOpen(false);
+    alert(`您已選擇: ${topic}`);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 relative overflow-hidden font-sans">
       {/* 側邊欄 */}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-2xl w-64 transform transition-transform duration-300 ease-in-out z-50 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="p-6 h-full flex flex-col">
+          <div className="flex justify-end mb-8">
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="text-2xl text-slate-500 hover:text-indigo-600 focus:outline-none transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-6">選單</h2>
+          <ul className="space-y-4">
+            <li>
+              <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                首頁
+              </a>
+            </li>
+            <li>
+              <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                聽力練習
+              </a>
+            </li>
+            <li>
+              <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                說話練習 (AI)
+              </a>
+            </li>
+            <li>
+              <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                閱讀練習
+              </a>
+            </li>
+            <li>
+              <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                寫作練習
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
       
       {/* 側邊欄半透明背景，點擊可關閉 */}
       {isSidebarOpen && (
@@ -51,8 +101,65 @@ export default function Home() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <TopicSelector />
-          <TranslationIcon onClick={handleTranslationClick} />
+          {/* 主題下拉選單 */}
+          <div className="relative">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="bg-indigo-500 text-white font-semibold py-2 px-4 rounded-full shadow-lg flex items-center space-x-2 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <span>{selectedTopic}</span>
+              <svg
+                className={`w-4 h-4 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20">
+                <ul className="py-1">
+                  {topics.map((topic) => (
+                    <li
+                      key={topic}
+                      onClick={() => handleTopicSelect(topic)}
+                      className="cursor-pointer px-4 py-2 hover:bg-gray-100 transition-colors"
+                    >
+                      {topic}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          {/* 翻譯圖示 */}
+          <button
+            onClick={handleTranslationClick}
+            className="bg-indigo-500 p-2 rounded-full shadow-lg transform hover:scale-110 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0113.882 8.85M13.882 8.85a18.022 18.022 0 00-6.732 3.664M13.882 8.85s-3.95-1.928-6.732 3.664M3 20h12m-6-1.556A18.022 18.022 0 0113.882 15.15m-4.732-3.664A18.022 18.022 0 0013.882 15.15"
+              />
+            </svg>
+          </button>
         </div>
       </nav>
 
