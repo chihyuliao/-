@@ -2,25 +2,126 @@
 
 import { useState } from 'react';
 
+// API 金鑰，由 Canvas 自動提供
+const API_KEY = "";
+
+// 將 Base64 編碼的音訊資料轉換為 ArrayBuffer
+const base64ToArrayBuffer = (base64) => {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+};
+
+// 將 PCM 音訊資料轉換為 WAV 格式的 Blob
+// 這是因為 API 返回的是 PCM 格式，需要轉換才能在瀏覽器中播放
+const pcmToWav = (pcmData, sampleRate) => {
+  const pcm16 = new Int16Array(pcmData);
+  const numChannels = 1;
+  const sampleRateValue = sampleRate;
+  const bitsPerSample = 16;
+  const byteRate = (bitsPerSample * numChannels * sampleRateValue) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
+  const dataSize = pcm16.length * 2;
+
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+  
+  // RIFF header
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, 'WAVE');
+
+  // fmt chunk
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // audio format 1: PCM
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRateValue, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+
+  // data chunk
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  // PCM data
+  for (let i = 0; i < pcm16.length; i++) {
+    view.setInt16(44 + i * 2, pcm16[i], true);
+  }
+
+  return new Blob([view], { type: 'audio/wav' });
+};
+
+// 寫入字串的輔助函數
+const writeString = (view, offset, string) => {
+  for (let i = 0; i < string.length; i++) {
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+};
+
 // 主頁面元件
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSpeakingModalOpen, setIsSpeakingModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState('日常英語');
+  const [translationResult, setTranslationResult] = useState(null);
+  const [translationLoading, setTranslationLoading] = useState(false);
+  const [speakingLoading, setSpeakingLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const topics = ['日常英語', '多益', '英檢', '雅思'];
 
   // 處理點擊說的功能
   const handleSpeakingClick = () => {
+    // 這裡我們直接生成音訊，而不是開啟彈窗
+    setSpeakingModal();
+  };
+
+  // 顯示 AI 老師準備好的彈窗
+  const setSpeakingModal = () => {
     setIsSpeakingModalOpen(true);
   };
 
   // 處理點擊翻譯圖示
-  const handleTranslationClick = () => {
+  const handleTranslationClick = async () => {
     const text = prompt("請輸入要翻譯的英文或中文:");
     if (text) {
-      alert(`這是您的翻譯結果:\n(此為模擬功能，請連接實際API)`);
+      setTranslationLoading(true);
+      setError(null);
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: `請將以下文字翻譯成英文或中文：${text}` }] }],
+          tools: [{ "google_search": {} }],
+          systemInstruction: {
+            parts: [{ text: "你是一個專業的翻譯助理，請將使用者提供的文字翻譯成英文或中文。" }]
+          },
+        };
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error(`API 請求失敗: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const translatedText = result.candidates?.[0]?.content?.parts?.[0]?.text || "無法取得翻譯結果。";
+        setTranslationResult(translatedText);
+      } catch (err) {
+        setError("翻譯時發生錯誤，請稍後再試。");
+        console.error("Translation API error:", err);
+      } finally {
+        setTranslationLoading(false);
+      }
     }
   };
 
@@ -28,6 +129,61 @@ export default function Home() {
     setSelectedTopic(topic);
     setIsOpen(false);
     alert(`您已選擇: ${topic}`);
+  };
+
+  // 處理 AI 說話功能
+  const callSpeakingApi = async () => {
+    setSpeakingLoading(true);
+    setError(null);
+    try {
+      const payload = {
+        contents: [{
+          parts: [{ text: "Say cheerfully: Have a wonderful day!" }]
+        }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: "Puck" }
+            }
+          }
+        },
+        model: "gemini-2.5-flash-preview-tts"
+      };
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`TTS API 請求失敗: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      const part = result?.candidates?.[0]?.content?.parts?.[0];
+      const audioData = part?.inlineData?.data;
+      const mimeType = part?.inlineData?.mimeType;
+
+      if (audioData && mimeType && mimeType.startsWith("audio/")) {
+        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)[1], 10);
+        const pcmData = base64ToArrayBuffer(audioData);
+        const wavBlob = pcmToWav(pcmData, sampleRate);
+        const audioUrl = URL.createObjectURL(wavBlob);
+        
+        const audio = new Audio(audioUrl);
+        audio.play().catch(e => console.error("音訊播放失敗:", e));
+      } else {
+        throw new Error("無法取得音訊資料。");
+      }
+    } catch (err) {
+      setError("生成語音時發生錯誤，請稍後再試。");
+      console.error("Speaking API error:", err);
+    } finally {
+      setSpeakingLoading(false);
+      setIsSpeakingModalOpen(false); // 播放後關閉彈窗
+    }
   };
 
   return (
@@ -168,6 +324,26 @@ export default function Home() {
           選擇您的<br className="sm:hidden" />練習模式
         </h1>
 
+        {/* 載入中動畫 */}
+        {(translationLoading || speakingLoading) && (
+          <div className="flex justify-center items-center my-8">
+            <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-xl text-indigo-500">
+              {translationLoading ? "翻譯中..." : "語音生成中..."}
+            </span>
+          </div>
+        )}
+
+        {/* 錯誤訊息 */}
+        {error && (
+          <div className="bg-red-100 text-red-700 p-4 rounded-lg my-8 text-center">
+            {error}
+          </div>
+        )}
+
         {/* 四個互動式學習區塊 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 max-w-4xl mx-auto">
           {/* 聽力區塊 */}
@@ -203,26 +379,42 @@ export default function Home() {
         </div>
       </main>
 
-      {/* 說話功能模擬彈窗 */}
+      {/* 說話功能彈窗 */}
       {isSpeakingModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity duration-300">
           <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full mx-4 text-center transform scale-95 animate-fade-in-up">
             <h3 className="text-3xl font-bold mb-4 text-slate-800">AI 老師準備好了！</h3>
             <p className="text-lg text-slate-600 mb-6">
-              點擊下方連結，前往 AI SPEAKING 網站進行練習。
+              點擊下方按鈕，聽聽 AI 老師的聲音。
             </p>
-            <a
-              href="https://github.com/chihyuliao/AI-SPEAKING.git" // 此處為模擬網址，請替換成實際網址
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={callSpeakingApi}
               className="inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition-colors duration-300 shadow-md hover:shadow-lg"
-              onClick={() => setIsSpeakingModalOpen(false)}
+              disabled={speakingLoading}
             >
-              開啟 AI SPEAKING
-            </a>
+              {speakingLoading ? "生成中..." : "點擊播放"}
+            </button>
             <button
               onClick={() => setIsSpeakingModalOpen(false)}
-              className="mt-4 text-slate-500 hover:text-slate-700 transition-colors duration-300"
+              className="mt-4 text-slate-500 hover:text-slate-700 transition-colors duration-300 block w-full"
+            >
+              關閉
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 翻譯結果彈窗 */}
+      {translationResult && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity duration-300">
+          <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full mx-4 transform scale-95 animate-fade-in-up">
+            <h3 className="text-3xl font-bold mb-4 text-slate-800">翻譯結果</h3>
+            <p className="text-lg text-slate-600 mb-6 whitespace-pre-line">
+              {translationResult}
+            </p>
+            <button
+              onClick={() => setTranslationResult(null)}
+              className="mt-4 bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition-colors duration-300 shadow-md hover:shadow-lg"
             >
               關閉
             </button>
