@@ -20,3 +20,4 @@ export default function TranslationIcon({ onClick }) {
       </svg>
     </button>
   );
+}
