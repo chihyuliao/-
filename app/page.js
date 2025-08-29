@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 relative overflow-hidden font-sans">
-      {/* 側邊欄 */}
+      {/* 側邊欄，只在 isSidebarOpen 為 true 時顯示 */}
       <div
         className={`fixed inset-y-0 left-0 bg-white shadow-2xl w-64 transform transition-transform duration-300 ease-in-out z-50 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -57,27 +57,19 @@ export default function Home() {
       {/* 頂部導航欄 */}
       <nav className="p-4 md:p-6 bg-white shadow-lg flex justify-start items-center z-20 sticky top-0 rounded-b-xl">
         <div className="flex items-center space-x-2">
+          {/* 三條槓按鈕，點擊後開啟側邊欄 */}
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="text-3xl text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md p-2 transition-transform transform hover:scale-110"
           >
             ☰
           </button>
+          {/* Logo 文字，固定在左上角 */}
           <div className="text-[36pt] font-extrabold text-indigo-600 tracking-wider">
             我讀字升級
           </div>
         </div>
-
-        {/* 這裡不再顯示任何其他元素 */}
       </nav>
-
-      <main className="container mx-auto p-4 md:p-8">
-        <div className="flex items-center justify-center h-full text-center">
-          <h1 className="text-3xl md:text-5xl font-black text-center text-slate-800 mb-8 md:mb-12 leading-tight">
-            歡迎使用<br className="sm:hidden" />我讀字升級
-          </h1>
-        </div>
-      </main>
     </div>
   );
 }
