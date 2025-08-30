@@ -2,22 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
-        {/* 右邊：網站標題 */}
-        <h1 className="text-lg font-semibold">我讀字升級</h1>
-
           export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-100">
       {/* 頂部欄 */}
+           {/* 右邊：網站標題 */}
+        <h1 className="text-lg font-semibold">我讀字升級</h1>
+
       <header className="flex items-center justify-between px-6 py-4 bg-blue-600 text-white shadow-md">
         {/* 左邊：Logo + 選單按鈕 */}
         <div className="flex items-center space-x-4">
           {/* Logo */}
           <div className="text-2xl font-extrabold tracking-wide cursor-pointer">
-            🌐 MyLogo
+           我讀字升級
           </div>
           {/* 選單按鈕 */}
           <button onClick={() => setOpen(true)} className="text-2xl hover:text-blue-200">
