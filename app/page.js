@@ -3,7 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export default function Home() {
+        {/* 右邊：網站標題 */}
+        <h1 className="text-lg font-semibold">我讀字升級</h1>
+
+          export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -21,9 +24,6 @@ export default function Home() {
             ☰
           </button>
         </div>
-
-        {/* 右邊：網站標題 */}
-        <h1 className="text-lg font-semibold">我讀字升級</h1>
       </header>
 
       {/* 側邊選單 */}
