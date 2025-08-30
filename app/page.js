@@ -63,11 +63,6 @@ export default function Home() {
         ></div>
       )}
 
-      {/* 主內容 */}
-      <main className="p-8 text-gray-800">
-        <h2 className="text-2xl font-bold mb-4">首頁內容</h2>
-        <p>這裡是首頁，左上角有 Logo，旁邊有選單按鈕。</p>
-      </main>
-    </div>
+
   );
 }
