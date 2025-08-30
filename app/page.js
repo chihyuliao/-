@@ -2,26 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
-          export default function Home() {
+
+export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-100">
       {/* 頂部欄 */}
-           {/* 右邊：網站標題 */}
-        <h1 className="text-lg font-semibold">我讀字升級</h1>
- {/* 選單按鈕 */}
-          <h1 button onClick={() => setOpen(true)} className="text-2xl hover:text-blue-200">
-            ☰ </h1>
-          </button>
-                    
       <header className="flex items-center justify-between px-6 py-4 bg-blue-600 text-white shadow-md">
-        {/* 左邊：Logo + 選單按鈕 */}
+        {/* 左邊：網站標題 + 選單按鈕 */}
         <div className="flex items-center space-x-4">
+          {/* 選單按鈕 */}
+          <button
+            onClick={() => setOpen(true)}
+            className="text-2xl hover:text-blue-200 transition-colors"
+          >
+            ☰
+          </button>
           {/* Logo */}
-          <div className="text-2xl font-extrabold tracking-wide cursor-pointer">
-           我讀字升級
-        
+          <h1 className="text-2xl font-extrabold tracking-wide">
+            我讀字升級
+          </h1>
         </div>
       </header>
 
@@ -33,16 +34,29 @@ import Link from "next/link";
       >
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold text-blue-600">選單</h2>
-          <button onClick={() => setOpen(false)} className="text-red-500 text-xl">
+          <button
+            onClick={() => setOpen(false)}
+            className="text-red-500 text-xl hover:text-red-700 transition-colors"
+          >
             ✖
           </button>
         </div>
         <nav className="flex flex-col p-4 space-y-4 text-gray-700">
-          <Link href="/" className="hover:text-blue-600 transition">🏠 首頁</Link>
-          <Link href="/listentrain" className="hover:text-blue-600 transition">聽力訓練</Link>
-          <Link href="/readtrain" className="hover:text-blue-600 transition">閱讀訓練</Link>
-          <Link href="/writetrain" className="hover:text-green-600 transition">寫作訓練</Link>
-        <Link href="/speaktrain" className="hover:text-green-600 transition">口說訓練</Link>
+          <Link href="/" className="hover:text-blue-600 transition">
+            🏠 首頁
+          </Link>
+          <Link href="/listentrain" className="hover:text-blue-600 transition">
+            聽力訓練
+          </Link>
+          <Link href="/readtrain" className="hover:text-blue-600 transition">
+            閱讀訓練
+          </Link>
+          <Link href="/writetrain" className="hover:text-green-600 transition">
+            寫作訓練
+          </Link>
+          <Link href="/speaktrain" className="hover:text-green-600 transition">
+            口說訓練
+          </Link>
         </nav>
       </div>
 
