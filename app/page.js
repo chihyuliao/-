@@ -10,7 +10,10 @@ import Link from "next/link";
       {/* 頂部欄 */}
            {/* 右邊：網站標題 */}
         <h1 className="text-lg font-semibold">我讀字升級</h1>
-
+ {/* 選單按鈕 */}
+          <h1 button onClick={() => setOpen(true)} className="text-2xl hover:text-blue-200">
+            ☰ </h1>
+          </button>
       <header className="flex items-center justify-between px-6 py-4 bg-blue-600 text-white shadow-md">
         {/* 左邊：Logo + 選單按鈕 */}
         <div className="flex items-center space-x-4">
@@ -18,10 +21,7 @@ import Link from "next/link";
           <div className="text-2xl font-extrabold tracking-wide cursor-pointer">
            我讀字升級
           </div>
-          {/* 選單按鈕 */}
-          <button onClick={() => setOpen(true)} className="text-2xl hover:text-blue-200">
-            ☰
-          </button>
+         
         </div>
       </header>
 
