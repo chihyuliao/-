@@ -32,8 +32,14 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial;
-  background: var(--bg);
-  color: #111827;
+  background: linear-gradient(to bottom, #ADD8E6, #FFFFFF);
+  
+  /* 確保漸層覆蓋整個瀏覽器視窗，即使內容不多，也能避免背景斷掉 */
+  min-height: 100vh;
+
+  /* 讓背景固定不動，當使用者滾動頁面時，漸層效果會保持不變 */
+  background-attachment: fixed;
+}
 }
 .container {
   display: flex;
