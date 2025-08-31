@@ -1,5 +1,6 @@
-use client";
+"use client";
 import React from "react";
+import Link from "next/link";
 
 export default function Header({ onToggleMenu }) {
   return (
@@ -12,10 +13,18 @@ export default function Header({ onToggleMenu }) {
         backgroundColor: "#f5f5f5",
       }}
     >
-      {/* 左上角網站名稱 */}
-      <div style={{ fontWeight: "bold", fontSize: "18px", color: "#004466" }}>
+      {/* 左上角網站名稱（可點擊回首頁） */}
+      <Link
+        href="/"
+        style={{
+          fontWeight: "bold",
+          fontSize: "18px",
+          color: "#004466",
+          textDecoration: "none",
+        }}
+      >
         我讀字升級
-      </div>
+      </Link>
 
       {/* 右上角功能列 */}
       <div style={{ display: "flex", alignItems: "center" }}>
