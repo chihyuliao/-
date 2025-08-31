@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Link from 'next/link';
+import Link from "next/link";
 
 const items = ["Listening", "Reading", "Writing", "AI Speaking", "Grammar Identification and Application ", "Daily Vocabulary"];
 
@@ -50,57 +50,29 @@ export default function Sidebar({
           </button>
         </div>
 
-     <div
-  style={{
-    padding: "10px 12px 14px 12px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-  }}
->
-  {/* Listening 選項 */}
-  <Link href="/聽力訓練" passHref>
-    <div className={"side-item " + (active === "Listening" ? "active" : "")}>
-      Listening
-    </div>
-  </Link>
-
-  {/* Reading 選項 */}
-  <Link href="/閱讀訓練" passHref>
-    <div className={"side-item " + (active === "Reading" ? "active" : "")}>
-      Reading
-    </div>
-  </Link>
-
-  {/* Writing 選項 */}
-  <Link href="/寫作訓練" passHref>
-    <div className={"side-item " + (active === "Writing" ? "active" : "")}>
-      Writing
-    </div>
-  </Link>
-
-  {/* AI Speaking 選項 */}
-  <Link href="/口說訓練" passHref>
-    <div className={"side-item " + (active === "AI Speaking" ? "active" : "")}>
-      AI Speaking
-    </div>
-  </Link>
-
-  {/* Grammar Identification and Application 選項 */}
-  <Link href="/文法訓練r" passHref>
-    <div className={"side-item " + (active === "Grammar Identification and Application " ? "active" : "")}>
-      Grammar Identification and Application 
-    </div>
-  </Link>
-  
-  {/* Daily Vocabulary 選項 */}
-  <Link href="/單字訓練" passHref>
-    <div className={"side-item " + (active === "Daily Vocabulary" ? "active" : "")}>
-      Daily Vocabulary
-    </div>
-  </Link>
-
-</div>
+        <div
+          style={{
+            padding: "10px 12px 14px 12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
+          {items.map((it) => (
+            <Link key={it} href={`/${it.toLowerCase().replace(/ /g, "-")}`} passHref>
+              <div
+                className={"side-item " + (active === it ? "active" : "")}
+                onClick={() => {
+                  onSelect(it);
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                {it}
+              </div>
+            </Link>
+          ))}
+        </div>
       </aside>
     </>
   );
