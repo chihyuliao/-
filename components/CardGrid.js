@@ -1,4 +1,4 @@
-mport React from "react";
+import React from "react";
 
 export default function CardGrid({ active }) {
   const cards = [
