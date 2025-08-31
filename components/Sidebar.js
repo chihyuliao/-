@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Link from 'next/link';
 
 const items = ["Listening", "Reading", "Writing", "AI Speaking", "Grammar Identification and Application ", "Daily Vocabulary"];
 
