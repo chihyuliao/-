@@ -1,48 +1,77 @@
-export default function Sidebar({ isOpen, onClose }) {
+import React, { useEffect } from "react";
+
+const items = ["Listen", "Read", "Write", "Speak", "Grammar", "Voc"];
+
+export default function Sidebar({
+  open = false,
+  onClose = () => {},
+  active,
+  onSelect = () => {},
+}) {
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape" && open) onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
   return (
-    <div
-      className={`fixed inset-y-0 left-0 bg-white shadow-2xl w-64 transform transition-transform duration-300 ease-in-out z-50 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
-    >
-      <div className="p-6 h-full flex flex-col">
-        <div className="flex justify-end mb-8">
-          <button
-            onClick={onClose}
-            className="text-2xl text-slate-500 hover:text-indigo-600 focus:outline-none transition-colors"
-          >
+    <>
+      <div
+        className={`drawer-overlay ${open ? "open" : ""}`}
+        onClick={onClose}
+        aria-hidden={!open}
+      />
+      <aside
+        className={`sidebar-drawer ${open ? "open" : ""}`}
+        aria-hidden={!open}
+        aria-label="左側選單"
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 12px 6px 12px",
+          }}
+        >
+          <h3 style={{ margin: 0 }}>選單</h3>
+          <button className="icon-btn" onClick={onClose} aria-label="關閉選單">
             ✕
           </button>
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-6">選單</h2>
-        <ul className="space-y-4">
-          <li>
-            <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-              首頁
-            </a>
-          </li>
-          <li>
-            <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-              聽力練習
-            </a>
-          </li>
-          <li>
-            <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-              說話練習 (AI)
-            </a>
-          </li>
-          <li>
-            <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-              閱讀練習
-            </a>
-          </li>
-          <li>
-            <a href="#" className="block text-lg font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-              寫作練習
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+
+        <div
+          style={{
+            padding: "10px 12px 14px 12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
+          {items.map((it) => (
+            <div
+              key={it}
+              className={"side-item " + (active === it ? "active" : "")}
+              onClick={() => {
+                onSelect(it);
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              {it}
+            </div>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 }
