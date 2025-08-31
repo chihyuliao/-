@@ -1,79 +1,41 @@
-import React, { useEffect } from "react";
+"use client";
+import React from "react";
 import Link from "next/link";
 
-const items = ["Listening", "Reading", "Writing", "AI Speaking", "Grammar Identification and Application ", "Daily Vocabulary"];
+const items = [
+  { name: "Listening", path: "/listening" },
+  { name: "Reading", path: "/reading" },
+  { name: "Writing", path: "/writing" },
+  { name: "Speaking", path: "/speaking" },
+  { name: "Grammar", path: "/grammar" },
+  { name: "Vocabulary", path: "/vocabulary" },
+];
 
-export default function Sidebar({
-  open = false,
-  onClose = () => {},
-  active,
-  onSelect = () => {},
-}) {
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === "Escape" && open) onClose();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
-
+export default function Sidebar({ open = false }) {
   return (
-    <>
-      <div
-        className={`drawer-overlay ${open ? "open" : ""}`}
-        onClick={onClose}
-        aria-hidden={!open}
-      />
-      <aside
-        className={`sidebar-drawer ${open ? "open" : ""}`}
-        aria-hidden={!open}
-        aria-label="左側選單"
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "12px 12px 6px 12px",
-          }}
-        >
-          <h3 style={{ margin: 0 }}> Comprehension Training</h3>
-          <button className="icon-btn" onClick={onClose} aria-label="關閉選單">
-            ✕
-          </button>
-        </div>
-
-        <div
-          style={{
-            padding: "10px 12px 14px 12px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-          }}
-        >
-          {items.map((it) => (
-            <Link key={it} href={`/${it.toLowerCase().replace(/ /g, "-")}`} passHref>
-              <div
-                className={"side-item " + (active === it ? "active" : "")}
-                onClick={() => {
-                  onSelect(it);
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                {it}
-              </div>
-            </Link>
-          ))}
-        </div>
-      </aside>
-    </>
+    <aside
+      className={`sidebar-drawer ${open ? "open" : ""}`}
+      aria-hidden={!open}
+      aria-label="左側選單"
+    >
+      <div>
+        {items.map((it, idx) => (
+          <Link
+            key={it.name}
+            href={it.path}
+            className="side-item"
+            style={{
+              backgroundColor: idx % 2 === 0 ? "#0070f3" : "#fff",
+              color: idx % 2 === 0 ? "#fff" : "#000",
+              display: "block",
+              padding: "12px",
+              textDecoration: "none",
+            }}
+          >
+            {it.name}
+          </Link>
+        ))}
+      </div>
+    </aside>
   );
 }
