@@ -18,7 +18,7 @@ export default function Header({ onToggleMenu }) {
         href="/"
         style={{
           fontWeight: "bold",
-          fontSize: "18px",
+          fontSize: "28px",
           color: "#004466",
           textDecoration: "none",
         }}
