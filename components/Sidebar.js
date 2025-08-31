@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const items = ["Listen", "Read", "Write", "Speak", "Grammar", "Voc"];
+const items = ["Listening", "Reading", "Writing", "AI Speaking", "Grammar Identification and Application ", "Daily Vocabulary"];
 
 export default function Sidebar({
   open = false,
@@ -43,7 +43,7 @@ export default function Sidebar({
             padding: "12px 12px 6px 12px",
           }}
         >
-          <h3 style={{ margin: 0 }}>選單</h3>
+          <h3 style={{ margin: 0 }}> Comprehension Training</h3>
           <button className="icon-btn" onClick={onClose} aria-label="關閉選單">
             ✕
           </button>
