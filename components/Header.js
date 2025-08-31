@@ -3,7 +3,7 @@ import React from "react";
 export default function Header({ topic, onChangeTopic, onToggleMenu }) {
   return (
     <header className="header">
-      <div className="brand">My English Website</div>
+      <div className="brand">我讀字升級</div>
       <div className="controls">
         <input
           type="text"
