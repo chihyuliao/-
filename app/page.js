@@ -32,7 +32,7 @@ export default function Page() {
           textAlign: "center",
         }}
       >
-        <h1 style={{ color: "#004466", marginBottom: "20px" }}>我讀字升級</h1>
+        <h1 style={{ color: "#004466", marginBottom: "20px" }}>ENGLISH TRAINING</h1>
         <div
           style={{
             display: "grid",
