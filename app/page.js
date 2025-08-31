@@ -1,10 +1,10 @@
 "use client";
+import Link from 'next/link';
 
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import CardGrid from "../components/CardGrid";
-import Link from 'next/link';
 
 export default function Page() {
   const [active, setActive] = useState("Listen");
