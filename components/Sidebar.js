@@ -8,7 +8,7 @@ const items = [
   { name: "writing", path: "/寫作訓練" },
   { name: "AI Speaking", path: "/口說訓練" },
   { name: "vocabulary", path: "/單字訓練" },
-  { name: "grammar application文法應用", path: "/" },
+  { name: "grammar application", path: "/文法應用" },
 ];
 
 export default function Sidebar({ open = false }) {
