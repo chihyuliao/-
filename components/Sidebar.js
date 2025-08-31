@@ -3,12 +3,12 @@ import React from "react";
 import Link from "next/link";
 
 const items = [
-  { name: "聽力訓練", path: "/listening" },
-  { name: "閱讀訓練", path: "/reading" },
-  { name: "寫作訓練", path: "/writing" },
-  { name: "AI Speaking", path: "/speaking" },
-  { name: "單字訓練", path: "/vocabulary" },
-  { name: "文法應用", path: "/grammar" },
+  { name: "listening", path: "/聽力訓練" },
+  { name: "reading", path: "/閱讀訓練" },
+  { name: "writing", path: "/寫作訓練" },
+  { name: "AI Speaking", path: "/口說訓練" },
+  { name: "vocabulary", path: "/單字訓練" },
+  { name: "grammar application文法應用", path: "/" },
 ];
 
 export default function Sidebar({ open = false }) {
@@ -25,7 +25,7 @@ export default function Sidebar({ open = false }) {
             href={it.path}
             className="side-item"
             style={{
-              backgroundColor: idx % 2 === 0 ? "#87CEEB" : "#D2B48C", // 天空藍 / 卡其色
+              backgroundColor: idx % 2 === 0 ? "#ADD8E6" : "#DEB887", // 天空藍 / 卡其色
               color: "#000",
               display: "block",
               padding: "12px",
