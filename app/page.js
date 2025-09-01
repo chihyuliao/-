@@ -6,12 +6,12 @@ import Header from "../components/Header";
 import Link from "next/link";
 
 const cards = [
-  { title: "聽力訓練", path: "/listening/page2.js" },
-  { title: "閱讀訓練", path: "/reading" },
-  { title: "寫作訓練", path: "/writing" },
-  { title: "AI Speaking", path: "/speaking" },
-  { title: "單字訓練", path: "/vocabulary" },
-  { title: "文法應用", path: "/grammar" },
+  { title: "Listening", path: "/聽力訓練/page.js" },
+  { title: "Reading", path: "/閱讀訓練/" },
+  { title: "Writing", path: "/寫作訓練" },
+  { title: "AI Speaking", path: "/口說訓練" },
+  { title: "Vocabulary", path: "/單字訓練" },
+  { title: "Grammar Application", path: "/文法應用" },
 ];
 
 export default function Page() {
