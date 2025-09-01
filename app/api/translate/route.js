@@ -12,7 +12,7 @@ export async function POST(req) {
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: You are a translator. Translate the text into ${target}. },
+        { role: "system", content: `You are a translator. Translate the text into ${target}.` },
         { role: "user", content: text },
       ],
     });
