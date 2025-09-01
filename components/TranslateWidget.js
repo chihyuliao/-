@@ -1,68 +1,91 @@
-// components/TranslateWidget.js
-import React, { useState } from "react";
+"use client";
+import { useState } from "react";
 
-const TranslateWidget = () => {
-  const [showBox, setShowBox] = useState(false);
-  const [text, setText] = useState("");
-  const [translated, setTranslated] = useState("");
+export default function TranslateWidget() {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [targetLang, setTargetLang] = useState("English"); // 可改為 English / Chinese
 
-  const handleTranslate = () => {
-    // 這裡你可以改成呼叫真正的翻譯 API
-    setTranslated(text + " (已翻譯)");
+  const handleTranslate = async () => {
+    if (!input) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: input, target: targetLang }),
+      });
+      const data = await res.json();
+      setOutput(data.translated || "翻譯失敗");
+    } catch (err) {
+      console.error(err);
+      setOutput("翻譯失敗");
+    }
+    setLoading(false);
   };
 
   return (
-    <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 9999 }}>
-      {/* Icon Button */}
+    <>
+      {/* 右下角按鈕 */}
       <button
-        onClick={() => setShowBox(!showBox)}
+        onClick={() => setOpen(!open)}
         style={{
-          borderRadius: "50%",
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
           width: "50px",
           height: "50px",
-          background: "#0070f3",
+          borderRadius: "50%",
+          backgroundColor: "#0070f3",
           color: "white",
           border: "none",
+          fontSize: "20px",
           cursor: "pointer",
-          fontSize: "20px"
         }}
       >
         🌐
       </button>
 
-      {/* Translate Box */}
-      {showBox && (
+      {/* 彈出翻譯視窗 */}
+      {open && (
         <div
           style={{
-            position: "absolute",
-            bottom: "60px",
-            right: "0",
-            width: "250px",
-            padding: "10px",
-            background: "white",
-            border: "1px solid #ccc",
+            position: "fixed",
+            bottom: "80px",
+            right: "20px",
+            width: "300px",
+            padding: "15px",
+            backgroundColor: "white",
+            border: "1px solid #ddd",
             borderRadius: "8px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.15)"
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           }}
         >
           <textarea
-            rows="3"
-            style={{ width: "100%", marginBottom: "5px" }}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            rows={3}
             placeholder="輸入文字..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            style={{ width: "100%", marginBottom: "0.5rem" }}
           />
+          <div style={{ marginBottom: "0.5rem" }}>
+            <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)}>
+              <option>English</option>
+              <option>Chinese</option>
+            </select>
+          </div>
           <button
             onClick={handleTranslate}
-            style={{ width: "100%", background: "#0070f3", color: "white", padding: "5px", border: "none", borderRadius: "5px" }}
+            style={{ width: "100%", marginBottom: "0.5rem" }}
+            disabled={loading}
           >
-            翻譯
+            {loading ? "翻譯中..." : "翻譯"}
           </button>
-          {translated && <p style={{ marginTop: "8px", fontSize: "14px" }}>{translated}</p>}
+          <div style={{ whiteSpace: "pre-wrap" }}>{output}</div>
         </div>
       )}
-    </div>
+    </>
   );
-};
-
-export default TranslateWidget;
+}
