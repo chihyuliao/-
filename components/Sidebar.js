@@ -3,10 +3,10 @@ import React from "react";
 import Link from "next/link";
 
 const items = [
-  { name: "Listening", path: "-/app/聽力訓練/page.js" },
+  { name: "Listening", path: "/listening/page.js" },
   { name: "Reading", path: "/閱讀訓練" },
   { name: "Writing", path: "/寫作訓練" },
-  { name: "AI Speaking", path: "/口說訓練" },
+  { name: "AI Speaking", path: "/speaking/page.js" },
   { name: "Vocabulary", path: "/單字訓練" },
   { name: "Grammar Application", path: "/文法應用" },
 ];
