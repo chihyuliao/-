@@ -4,6 +4,7 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import Link from "next/link";
+import TranslateWidget from "../components/TranslateWidget";
 
 const cards = [
   { title: "Listening", path: "/listening/page.js" },
@@ -64,6 +65,9 @@ export default function Page() {
           ))}
         </div>
       </main>
+
+      {/* ✅ 翻譯小工具 */}
+      <TranslateWidget />
     </div>
   );
 }
