@@ -6,10 +6,10 @@ import Header from "../components/Header";
 import Link from "next/link";
 
 const cards = [
-  { title: "Listening", path: "/聽力訓練/page.js" },
+  { title: "Listening", path: "/listening/page.js" },
   { title: "Reading", path: "/閱讀訓練/" },
   { title: "Writing", path: "/寫作訓練" },
-  { title: "AI Speaking", path: "/口說訓練" },
+  { title: "AI Speaking", path: "/speaking/page.js" },
   { title: "Vocabulary", path: "/單字訓練" },
   { title: "Grammar Application", path: "/文法應用" },
 ];
