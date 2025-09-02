@@ -7,10 +7,10 @@ import Link from "next/link";
 import TranslateWidget from "../components/TranslateWidget";
 
 const cards = [
-  { title: "Listening", path: "/listening/page.js" },
-  { title: "Reading", path: "/閱讀訓練/" },
-  { title: "Writing", path: "/寫作訓練" },
-  { title: "AI Speaking", path: "/speaking/page.js" },
+  { title: "Listening", path: "/listening" },
+  { title: "Reading", path: "/reading" },
+  { title: "Writing", path: "/writing" },
+  { title: "AI Speaking", path: "/speaking" },
   { title: "Vocabulary", path: "/單字訓練" },
   { title: "Grammar Application", path: "/文法應用" },
 ];
