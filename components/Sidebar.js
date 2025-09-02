@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const items = [
   { name: "Listening", path: "/listening" },
-  { name: "Reading", path: "/閱讀訓練" },
-  { name: "Writing", path: "/寫作訓練" },
-  { name: "AI Speaking", path: "/speaking/page.js" },
+  { name: "Reading", path: "/reading" },
+  { name: "Writing", path: "/writing },
+  { name: "AI Speaking", path: "/speaking" },
   { name: "Vocabulary", path: "/單字訓練" },
   { name: "Grammar Application", path: "/文法應用" },
 ];
