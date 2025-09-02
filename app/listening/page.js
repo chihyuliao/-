@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import { useState } from "react";
 
-export default function listeningPage() {
+export default function ListeningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
