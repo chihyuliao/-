@@ -45,9 +45,9 @@ export default function Page() {
             style={{ padding: "6px 12px", fontSize: "16px" }}
           >
             <option value="日常英文">日常英文</option>
-            <option value="旅遊英文">旅遊英文</option>
-            <option value="商務英文">商務英文</option>
-            <option value="考試英文">考試英文</option>
+            <option value="英檢">英檢</option>
+            <option value="多益">多益</option>
+            <option value="雅思">雅思</option>
           </select>
         </div>
 
