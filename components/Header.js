@@ -7,7 +7,6 @@ export default function Header({ onToggleMenu }) {
 
   const handleTopicChange = (e) => {
     setTopic(e.target.value);
-    // 這裡之後可以依照 topic 做不同邏輯，例如路由跳轉或狀態切換
     console.log("選擇的主題：", e.target.value);
   };
 
@@ -34,8 +33,17 @@ export default function Header({ onToggleMenu }) {
         我讀字升級
       </Link>
 
-      {/* 右上角功能列：先是主題選擇，再是選單按鈕 */}
+      {/* 右上角功能列 */}
       <div style={{ display: "flex", alignItems: "center" }}>
+        <span
+          style={{
+            marginRight: "8px",
+            fontSize: "16px",
+            color: "#333",
+          }}
+        >
+          Topic selection:
+        </span>
         <select
           value={topic}
           onChange={handleTopicChange}
