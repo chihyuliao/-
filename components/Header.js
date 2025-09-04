@@ -2,12 +2,9 @@
 import React from "react";
 import Link from "next/link";
 
-export default function Header({ onToggleMenu }) {
-  const [topic, setTopic] = React.useState("日常英文");
-
+export default function Header({ onToggleMenu, onTopicChange, topic }) {
   const handleTopicChange = (e) => {
-    setTopic(e.target.value);
-    console.log("選擇的主題：", e.target.value);
+    onTopicChange(e.target.value);
   };
 
   return (
