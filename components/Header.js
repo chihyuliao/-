@@ -39,25 +39,7 @@ export default function Header({ onToggleMenu, onTopicChange, topic }) {
             color: "#333",
           }}
         >
-          Topic selection:
-        </span>
-        <select
-          value={topic}
-          onChange={handleTopicChange}
-          style={{
-            fontSize: "16px",
-            padding: "5px 10px",
-            marginRight: "15px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            cursor: "pointer",
-          }}
-        >
-          <option value="日常英文">日常英文</option>
-          <option value="多益">多益</option>
-          <option value="雅思">雅思</option>
-          <option value="英檢">英檢</option>
-        </select>
+        
 
         <button
           onClick={onToggleMenu}
