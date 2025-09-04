@@ -52,6 +52,7 @@ export default function Header({ onToggleMenu, onTopicChange, topic }) {
           }}
         >
           ☰
+            </span>
         </button>
       </div>
     </header>
