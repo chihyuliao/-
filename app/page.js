@@ -17,11 +17,12 @@ const cards = [
 
 export default function Page() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState("日常英文"); // ✅ topic state
 
   return (
     <div>
-      {/* 側拉式選單 */}
-      <Sidebar open={drawerOpen} />
+      {/* 側拉式選單，傳入 topic */}
+      <Sidebar open={drawerOpen} topic={selectedTopic} />
 
       {/* 頂部 Header */}
       <Header onToggleMenu={() => setDrawerOpen((prev) => !prev)} />
@@ -34,6 +35,23 @@ export default function Page() {
         }}
       >
         <h1 style={{ color: "#004466", marginBottom: "20px" }}>ENGLISH TRAINING</h1>
+
+        {/* ✅ Dropdown 選擇主題 */}
+        <div style={{ marginBottom: "30px" }}>
+          <label style={{ marginRight: "10px", fontWeight: "bold" }}>選擇主題:</label>
+          <select
+            value={selectedTopic}
+            onChange={(e) => setSelectedTopic(e.target.value)}
+            style={{ padding: "6px 12px", fontSize: "16px" }}
+          >
+            <option value="日常英文">日常英文</option>
+            <option value="旅遊英文">旅遊英文</option>
+            <option value="商務英文">商務英文</option>
+            <option value="考試英文">考試英文</option>
+          </select>
+        </div>
+
+        {/* 卡片區 */}
         <div
           style={{
             display: "grid",
@@ -66,7 +84,7 @@ export default function Page() {
         </div>
       </main>
 
-      {/* ✅ 翻譯小工具 */}
+      {/* 翻譯小工具 */}
       <TranslateWidget />
     </div>
   );
