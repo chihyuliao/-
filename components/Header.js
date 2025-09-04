@@ -30,17 +30,6 @@ export default function Header({ onToggleMenu, onTopicChange, topic }) {
         我讀字升級
       </Link>
 
-      {/* 右上角功能列 */}
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <span
-          style={{
-            marginRight: "8px",
-            fontSize: "16px",
-            color: "#333",
-          }}
-        >
-        
-
         <button
           onClick={onToggleMenu}
           aria-label="開啟或關閉選單"
@@ -52,7 +41,7 @@ export default function Header({ onToggleMenu, onTopicChange, topic }) {
           }}
         >
           ☰
-            </span>
+         
         </button>
       </div>
     </header>
