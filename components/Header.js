@@ -26,7 +26,7 @@ export default function Header({ onToggleMenu }) {
         我讀字升級
       </Link>
 
-      {/* 右上角功能列 */}
+      {/* 右上角功能列（只保留選單按鈕，移到最右邊） */}
       <div style={{ display: "flex", alignItems: "center" }}>
         <button
           onClick={onToggleMenu}
@@ -34,15 +34,12 @@ export default function Header({ onToggleMenu }) {
           style={{
             fontSize: "20px",
             cursor: "pointer",
-            marginRight: "15px",
             background: "none",
             border: "none",
           }}
         >
           ☰
         </button>
-        <button style={{ marginRight: "10px" }}>🔔</button>
-        <button>⚙</button>
       </div>
     </header>
   );
