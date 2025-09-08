@@ -25,7 +25,7 @@ export default function ListeningPage() {
         const today = new Date().toISOString().split("T")[0];
 
         let systemPrompt = topic === "多益" 
-          ? 你是一個TOEIC出題老師，生成完整聽力題庫250題... 
+          ? `你是一個TOEIC出題老師，生成完整聽力題庫250題... `
           : `你是一個英語老師，生成題目...`;
 
         const response = await client.chat.completions.create({
