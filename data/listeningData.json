@@ -1,0 +1,33 @@
+{
+  "TOEIC": {
+    "listening": [
+      {
+        "id": 1,
+        "question": "Part 1: Choose the response that best completes the statement.",
+        "audio": "/audios/toeic1.mp3",
+        "options": ["A", "B", "C", "D"],
+        "answer": "A"
+      }
+    ]
+  },
+  "IELTS": {
+    "listening": [
+      {
+        "id": 1,
+        "question": "Section 1: Questions 1–10. Complete the form.",
+        "audio": "/audios/ielts1.mp3",
+        "options": ["1", "2", "3", "4"],
+        "answer": "2"
+      }
+    ]
+  },
+  "Daily": {
+    "listening": [
+      {
+        "id": 1,
+        "question": "A: How was your weekend? B: It was great—went hiking.",
+        "audio": "/audios/daily1.mp3"
+      }
+    ]
+  }
+}
