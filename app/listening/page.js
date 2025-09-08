@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
+import OpenAI from "openai";
 
 export default function ListeningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
