@@ -1,15 +1,16 @@
 "use client";
 
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import Header from "../../components/Header";
+import Sidebar from "../../components/Sidebar";
 import OpenAI from "openai";
 
 export default function ListeningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const searchParams = useSearchParams();
   const topic = searchParams.get("topic") || "多益"; // 預設多益
 
@@ -23,7 +24,6 @@ export default function ListeningPage() {
 
         const today = new Date().toISOString().split("T")[0];
 
-        // 不同主題生成指令
         let systemPrompt = "";
         if (topic === "多益") {
           systemPrompt = `
@@ -43,7 +43,6 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
 題目不重複。
 `;
         } else {
-          // 日常英文
           systemPrompt = `
 你是一個英語老師，生成日常生活會話聽力題250題，輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。
 `;
@@ -53,7 +52,7 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
+            { role: "user", content: 今天日期是 ${today}，生成今天的題目 },
           ],
         });
 
@@ -72,7 +71,7 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom, #b3e5fc, #ffffff)" }}>
       <Sidebar open={drawerOpen} />
-      <Header onToggleMenu={() => setDrawerOpen((prev) => !prev)} />
+      <Header onToggleMenu={() => setDrawerOpen(prev => !prev)} />
 
       <main style={{ padding: "40px 20px", textAlign: "center" }}>
         <h1 style={{ color: "#004466" }}>{topic} 聽力訓練 (250 題)</h1>
@@ -81,11 +80,11 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
           <p>題目生成中，請稍候...</p>
         ) : (
           <div style={{ textAlign: "left", maxWidth: "900px", margin: "0 auto" }}>
-            {Object.keys(questions).map((part) => (
+            {Object.keys(questions).map(part =>
               questions[part] && (
                 <div key={part}>
                   <h2>{part}</h2>
-                  {questions[part].map((q) => (
+                  {questions[part].map(q => (
                     <div key={q.id} style={{ marginBottom: "15px" }}>
                       {q.image && <img src={q.image} alt={`Pic ${q.id}`} style={{ width: "100%", maxWidth: "400px" }} />}
                       {q.conversation && <pre>{q.conversation.join("\n")}</pre>}
@@ -103,7 +102,7 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
                   ))}
                 </div>
               )
-            ))}
+            )}
           </div>
         )}
       </main>
