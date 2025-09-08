@@ -53,7 +53,7 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: 今天日期是 ${today}，生成今天的題目 },
+            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
           ],
         });
 
