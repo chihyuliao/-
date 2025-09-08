@@ -61,7 +61,7 @@ export default function Page() {
             // ✅ 如果是 Listening，要加上 topic 參數
             const href =
               card.title === "Listening"
-                ? ${card.path}?topic=${selectedTopic}
+                ? `${card.path}?topic=${selectedTopic}`
                 : card.path;
 
             return (
