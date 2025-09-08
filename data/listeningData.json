@@ -1,33 +1,14 @@
 {
-  "TOEIC": {
-    "listening": [
-      {
-        "id": 1,
-        "question": "Part 1: Choose the response that best completes the statement.",
-        "audio": "/audios/toeic1.mp3",
-        "options": ["A", "B", "C", "D"],
-        "answer": "A"
-      }
-    ]
+  "多益": {
+    "Part1": [
+      { "id": 1, "question": "Photo description example", "audio": "/audios/toeic/p1_1.mp3", "options": ["A","B","C","D"], "answer": "A" }
+    ],
+    "Part2": [ ... ],
+    "Part3": [ ... ],
+    "Part4": [ ... ]
   },
-  "IELTS": {
-    "listening": [
-      {
-        "id": 1,
-        "question": "Section 1: Questions 1–10. Complete the form.",
-        "audio": "/audios/ielts1.mp3",
-        "options": ["1", "2", "3", "4"],
-        "answer": "2"
-      }
-    ]
-  },
-  "Daily": {
-    "listening": [
-      {
-        "id": 1,
-        "question": "A: How was your weekend? B: It was great—went hiking.",
-        "audio": "/audios/daily1.mp3"
-      }
-    ]
+  "雅思": {
+    "Section1": [ ... ],
+    "Section2": [ ... ]
   }
 }
