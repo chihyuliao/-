@@ -35,7 +35,7 @@ Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: You are a translator. Translate the text into ${target}. },
+        { role: "system", content: `You are a translator. Translate the text into ${target}.` },
         { role: "user", content: text },
       ],
     });
