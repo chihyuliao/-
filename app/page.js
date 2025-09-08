@@ -21,13 +21,9 @@ export default function Page() {
 
   return (
     <div>
-      {/* 側拉式選單，傳入 topic */}
       <Sidebar open={drawerOpen} topic={selectedTopic} />
-
-      {/* 頂部 Header */}
       <Header onToggleMenu={() => setDrawerOpen((prev) => !prev)} />
 
-      {/* 主內容 */}
       <main
         style={{
           padding: "40px 20px",
@@ -61,30 +57,37 @@ export default function Page() {
             margin: "0 auto",
           }}
         >
-          {cards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.path}
-              style={{
-                display: "block",
-                padding: "30px 20px",
-                borderRadius: "10px",
-                background: "white",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                fontWeight: "bold",
-                fontSize: "18px",
-                color: "#004466",
-                textDecoration: "none",
-                transition: "transform 0.2s ease",
-              }}
-            >
-              {card.title}
-            </Link>
-          ))}
+          {cards.map((card) => {
+            // ✅ 如果是 Listening，要加上 topic 參數
+            const href =
+              card.title === "Listening"
+                ? ${card.path}?topic=${selectedTopic}
+                : card.path;
+
+            return (
+              <Link
+                key={card.title}
+                href={href}
+                style={{
+                  display: "block",
+                  padding: "30px 20px",
+                  borderRadius: "10px",
+                  background: "white",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  color: "#004466",
+                  textDecoration: "none",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                {card.title}
+              </Link>
+            );
+          })}
         </div>
       </main>
 
-      {/* 翻譯小工具 */}
       <TranslateWidget />
     </div>
   );
