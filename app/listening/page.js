@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import OpenAI from "openai";
 
 export default function ListeningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -18,48 +17,22 @@ export default function ListeningPage() {
     async function fetchQuestions() {
       setLoading(true);
       try {
-        const client = new OpenAI({
-          apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+        const res = await fetch("/api/listening", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ topic }),
         });
 
-        const today = new Date().toISOString().split("T")[0];
-
-        let systemPrompt = "";
+        const data = await res.json();
         if (topic === "多益") {
-          systemPrompt = `
-你是一個TOEIC出題老師，生成完整聽力題庫250題：
-Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理解。
-輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。照片題請使用 placeholder 圖片URL。題目不重複。
-`;
-        } else if (topic === "雅思") {
-          systemPrompt = `
-你是一個IELTS出題老師，生成完整聽力題庫250題，按照IELTS正式聽力題型：
-Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。
-題目不重複。
-`;
-        } else if (topic === "英檢") {
-          systemPrompt = `
-你是一個GEPT出題老師，生成完整聽力題庫250題，按照GEPT正式考試題型，輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。
-題目不重複。
-`;
+          setQuestions(data.questions);
         } else {
-          systemPrompt = `
-你是一個英語老師，生成日常生活會話聽力題250題，輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。
-`;
+          setQuestions([]); // 其他 topic 暫不生成題庫
         }
-
-        const response = await client.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
-          ],
-        });
-
-        const data = JSON.parse(response.choices[0].message.content);
-        setQuestions(data);
       } catch (error) {
-        console.error("題目生成錯誤:", error);
+        console.error("題目取得錯誤:", error);
       } finally {
         setLoading(false);
       }
@@ -74,11 +47,11 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
       <Header onToggleMenu={() => setDrawerOpen(prev => !prev)} />
 
       <main style={{ padding: "40px 20px", textAlign: "center" }}>
-        <h1 style={{ color: "#004466" }}>{topic} 聽力訓練 (250 題)</h1>
+        <h1 style={{ color: "#004466" }}>{topic} 聽力訓練 {topic === "多益" ? "(250 題)" : ""}</h1>
 
         {loading ? (
           <p>題目生成中，請稍候...</p>
-        ) : (
+        ) : questions.length > 0 ? (
           <div style={{ textAlign: "left", maxWidth: "900px", margin: "0 auto" }}>
             {Object.keys(questions).map(part =>
               questions[part] && (
@@ -104,6 +77,8 @@ Part1-4各題型比例與正式考試一致，輸出JSON格式，每題包含id,
               )
             )}
           </div>
+        ) : (
+          <p>此題庫尚未生成，請選擇多益以查看完整題庫。</p>
         )}
       </main>
     </div>
