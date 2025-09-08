@@ -4,19 +4,18 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import listeningData from "../../data/listeningData.json"; // 你的題庫 JSON
+import listeningData from "../../data/listeningData.json";
 
 export default function ListeningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const searchParams = useSearchParams();
-  const topic = searchParams.get("topic"); // e.g., 多益 / 雅思
+  const topic = searchParams.get("topic");
   const [questions, setQuestions] = useState([]);
 
-  // 隨機抽題，每次載入刷新
   useEffect(() => {
     if (!topic) return;
 
-    const allParts = listeningData[topic]; // e.g., Part1~Part4
+    const allParts = listeningData[topic];
     if (!allParts) {
       setQuestions([]);
       return;
@@ -28,10 +27,15 @@ export default function ListeningPage() {
       const pool = allParts[part];
       if (!pool) return;
 
-      // 每個 Part/Section 隨機抽題
-      const shuffled = pool.sort(() => 0.5 - Math.random());
+      // 每個 Part/Section 每天隨機抽題（用日期作 seed）
+      const dateSeed = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const hash = Array.from(dateSeed + part).reduce(
+        (acc, char) => acc + char.charCodeAt(0),
+        0
+      );
+      const shuffled = [...pool].sort(() => ((Math.sin(hash) * 10000) % 1) - 0.5);
 
-      // 假設每個 Part 抽 5 題（可調整）
+      // 假設每個 Part 抽 5 題，可依需求調整
       selected.push(...shuffled.slice(0, 5));
     });
 
