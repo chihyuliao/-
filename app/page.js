@@ -40,7 +40,7 @@ export default function Page() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px", maxWidth: "1000px", margin: "0 auto" }}>
           {cards.map((card) => {
-            const href = card.title === "Listening" ? ${card.path}?topic=${selectedTopic} : card.path;
+            const href = card.title === "Listening" ? `${card.path}?topic=${selectedTopic}` : card.path;
             return (
               <Link key={card.title} href={href} style={{ display: "block", padding: "30px 20px", borderRadius: "10px", background: "white", boxShadow: "0 4px 10px rgba(0,0,0,0.1)", fontWeight: "bold", fontSize: "18px", color: "#004466", textDecoration: "none", transition: "transform 0.2s ease" }}>
                 {card.title}
