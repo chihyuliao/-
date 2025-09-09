@@ -65,7 +65,7 @@ export default function Page() {
           {cards.map((card) => {
             const href =
               card.title === "Listening"
-                ? ${card.path}?topic=${selectedTopic}
+                ? `${card.path}?topic=${selectedTopic}`
                 : card.path;
 
             return (
