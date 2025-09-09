@@ -1,14 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import OpenAI from "openai";
 
-export default function ListeningContent() {
+export default function ListeningContent({ topic }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const searchParams = useSearchParams();
-  const topic = searchParams.get("topic") || "多益"; // 預設多益
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -35,7 +32,7 @@ Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
+            { role: "user", content: 今天日期是 ${today}，生成今天的題目 },
           ],
         });
 
