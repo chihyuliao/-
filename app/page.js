@@ -58,7 +58,7 @@ export default function Page() {
             // 如果是 Listening，就帶上 topic query
             const href =
               card.title === "Listening"
-                ? ${card.path}?topic=${encodeURIComponent(selectedTopic)}
+                ? `${card.path}?topic=${encodeURIComponent(selectedTopic)}`
                 : card.path;
 
             return (
