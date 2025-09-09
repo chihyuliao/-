@@ -16,13 +16,18 @@ const cards = [
 ];
 
 export default function Page() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState("日常英文"); // ✅ topic state
 
   return (
     <div>
-      <Sidebar open={drawerOpen} topic={selectedTopic} />
-      <Header onToggleMenu={() => setDrawerOpen((prev) => !prev)} />
+      {/* Sidebar 可以自己用 topic 狀態 */}
+      <Sidebar topic={selectedTopic} />
+
+      {/* Header 不再傳 onToggleMenu，自己管理 menu */}
+      <Header 
+        onTopicChange={(topic) => setSelectedTopic(topic)} 
+        topic={selectedTopic} 
+      />
 
       <main
         style={{
@@ -32,7 +37,7 @@ export default function Page() {
       >
         <h1 style={{ color: "#004466", marginBottom: "20px" }}>ENGLISH TRAINING</h1>
 
-        {/* ✅ Dropdown 選擇主題 */}
+        {/* Dropdown 選擇主題 */}
         <div style={{ marginBottom: "30px" }}>
           <label style={{ marginRight: "10px", fontWeight: "bold" }}>選擇主題:</label>
           <select
@@ -58,10 +63,9 @@ export default function Page() {
           }}
         >
           {cards.map((card) => {
-            // ✅ 如果是 Listening，要加上 topic 參數
             const href =
               card.title === "Listening"
-                ? `${card.path}?topic=${selectedTopic}`
+                ? ${card.path}?topic=${selectedTopic}
                 : card.path;
 
             return (
