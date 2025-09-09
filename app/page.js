@@ -1,4 +1,4 @@
-"use client";
+"use client"; // 完全 client side
 
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
@@ -16,25 +16,17 @@ const cards = [
 ];
 
 export default function Page() {
-  const [selectedTopic, setSelectedTopic] = useState("日常英文"); // ✅ topic state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState("日常英文");
+
+  const handleToggleMenu = () => setSidebarOpen((prev) => !prev);
 
   return (
     <div>
-      {/* Sidebar 可以自己用 topic 狀態 */}
-      <Sidebar topic={selectedTopic} />
+      <Sidebar open={sidebarOpen} topic={selectedTopic} />
+      <Header onToggleMenu={handleToggleMenu} topic={selectedTopic} />
 
-      {/* Header 不再傳 onToggleMenu，自己管理 menu */}
-      <Header 
-        onTopicChange={(topic) => setSelectedTopic(topic)} 
-        topic={selectedTopic} 
-      />
-
-      <main
-        style={{
-          padding: "40px 20px",
-          textAlign: "center",
-        }}
-      >
+      <main style={{ padding: "40px 20px", textAlign: "center" }}>
         <h1 style={{ color: "#004466", marginBottom: "20px" }}>ENGLISH TRAINING</h1>
 
         {/* Dropdown 選擇主題 */}
@@ -63,9 +55,10 @@ export default function Page() {
           }}
         >
           {cards.map((card) => {
+            // 如果是 Listening，就帶上 topic query
             const href =
               card.title === "Listening"
-                ? `${card.path}?topic=${selectedTopic}`
+                ? ${card.path}?topic=${encodeURIComponent(selectedTopic)}
                 : card.path;
 
             return (
