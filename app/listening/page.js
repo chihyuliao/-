@@ -1,4 +1,4 @@
-"use client";
+"use client"; // 必須放在最上面
 
 import { useState } from "react";
 import Header from "../../components/Header";
