@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Link from "next/link";
 
 const items = [
@@ -13,16 +12,28 @@ const items = [
 
 export default function Sidebar({ open = false, topic = "日常英文" }) {
   return (
-    <aside style={{ position: "fixed", left: open ? 0 : "-250px", top: 0, width: "250px", height: "100%", background: "#eee", transition: "left 0.3s", padding: "20px" }}>
-      <div style={{ marginBottom: "20px", fontWeight: "bold" }}>
-        <div>Topic: {topic}</div>
-        <div>Cohesion Training</div>
+    <aside className={`sidebar-drawer ${open ? "open" : ""}`} aria-hidden={!open} aria-label="左側選單">
+      <div>
+        <div style={{ backgroundColor: "#f0f0f0", color: "#004466", fontWeight: "bold", padding: "12px", marginBottom: "10px" }}>
+          <div>Topic selection: {topic}</div>
+          <div>Cohesion Training</div>
+        </div>
+
+        {items.map((it, idx) => (
+          <Link key={it.name} href={it.path} className="side-item"
+            style={{
+              backgroundColor: idx % 2 === 0 ? "#ADD8E6" : "#DEB887",
+              color: "#000",
+              display: "block",
+              padding: "12px",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            {it.name}
+          </Link>
+        ))}
       </div>
-      {items.map((it, idx) => (
-        <Link key={it.name} href={it.path} style={{ display: "block", padding: "10px", backgroundColor: idx % 2 === 0 ? "#ADD8E6" : "#DEB887", marginBottom: "5px", fontWeight: "bold", textDecoration: "none", color: "#000" }}>
-          {it.name}
-        </Link>
-      ))}
     </aside>
   );
 }
