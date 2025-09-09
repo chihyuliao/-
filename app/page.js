@@ -1,8 +1,7 @@
-"use client"; // 完全 client side
-
+"use client";
 import { useState } from "react";
-import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import Link from "next/link";
 import TranslateWidget from "../components/TranslateWidget";
 
@@ -16,27 +15,22 @@ const cards = [
 ];
 
 export default function Page() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState("日常英文");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleToggleMenu = () => setSidebarOpen((prev) => !prev);
 
   return (
     <div>
       <Sidebar open={sidebarOpen} topic={selectedTopic} />
-      <Header onToggleMenu={handleToggleMenu} topic={selectedTopic} />
+      <Header onToggleMenu={handleToggleMenu} topic={selectedTopic} onTopicChange={setSelectedTopic} />
 
       <main style={{ padding: "40px 20px", textAlign: "center" }}>
         <h1 style={{ color: "#004466", marginBottom: "20px" }}>ENGLISH TRAINING</h1>
 
-        {/* Dropdown 選擇主題 */}
         <div style={{ marginBottom: "30px" }}>
           <label style={{ marginRight: "10px", fontWeight: "bold" }}>選擇主題:</label>
-          <select
-            value={selectedTopic}
-            onChange={(e) => setSelectedTopic(e.target.value)}
-            style={{ padding: "6px 12px", fontSize: "16px" }}
-          >
+          <select value={selectedTopic} onChange={(e) => setSelectedTopic(e.target.value)}>
             <option value="日常英文">日常英文</option>
             <option value="英檢">英檢</option>
             <option value="多益">多益</option>
@@ -44,40 +38,11 @@ export default function Page() {
           </select>
         </div>
 
-        {/* 卡片區 */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: "20px",
-            maxWidth: "1000px",
-            margin: "0 auto",
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px", maxWidth: "1000px", margin: "0 auto" }}>
           {cards.map((card) => {
-            // 如果是 Listening，就帶上 topic query
-            const href =
-              card.title === "Listening"
-                ? `${card.path}?topic=${encodeURIComponent(selectedTopic)}`
-                : card.path;
-
+            const href = card.title === "Listening" ? ${card.path}?topic=${selectedTopic} : card.path;
             return (
-              <Link
-                key={card.title}
-                href={href}
-                style={{
-                  display: "block",
-                  padding: "30px 20px",
-                  borderRadius: "10px",
-                  background: "white",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  color: "#004466",
-                  textDecoration: "none",
-                  transition: "transform 0.2s ease",
-                }}
-              >
+              <Link key={card.title} href={href} style={{ display: "block", padding: "30px 20px", borderRadius: "10px", background: "white", boxShadow: "0 4px 10px rgba(0,0,0,0.1)", fontWeight: "bold", fontSize: "18px", color: "#004466", textDecoration: "none", transition: "transform 0.2s ease" }}>
                 {card.title}
               </Link>
             );
