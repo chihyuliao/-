@@ -32,7 +32,7 @@ Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: 今天日期是 ${today}，生成今天的題目 },
+            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
           ],
         });
 
