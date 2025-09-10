@@ -49,7 +49,7 @@ export async function GET(req) {
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: 今天日期是 ${today}，請生成題目 },
+        { role: "user", content: `今天日期是 ${today}，請生成題目` },
       ],
     });
 
