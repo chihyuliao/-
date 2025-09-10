@@ -7,7 +7,6 @@ export async function GET(req) {
 
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-    // 先分批生成 part1 題目
     let systemPrompt = "";
     if (topic === "多益") {
       systemPrompt = `
@@ -30,7 +29,7 @@ id, question, options, answer
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: "請生成今天的題目" },
+        { role: "user", content: "生成今天題目" },
       ],
     });
 
@@ -41,10 +40,7 @@ id, question, options, answer
       console.error("解析 JSON 失敗", err, response.choices[0].message.content);
     }
 
-    return new Response(JSON.stringify({ questions }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ questions }), { status: 200, headers: { "Content-Type": "application/json" } });
   } catch (error) {
     console.error("生成題目錯誤", error);
     return new Response(JSON.stringify({ questions: [] }), { status: 200 });
