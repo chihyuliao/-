@@ -17,6 +17,7 @@ export default function ListeningPage() {
     <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom, #b3e5fc, #ffffff)" }}>
       <Sidebar open={sidebarOpen} topic={topic} />
       <Header onToggleMenu={handleToggleMenu} topic={topic} />
+
       <main style={{ padding: "40px 20px", textAlign: "center" }}>
         <h1 style={{ color: "#004466" }}>聽力訓練</h1>
         <ListeningContent topic={topic} />
