@@ -6,9 +6,8 @@ export default function ListeningContent({ topic }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [answers, setAnswers] = useState({}); // 紀錄使用者的答案
+  const [answers, setAnswers] = useState({});
 
-  // 一進頁面就 fetch 題目
   useEffect(() => {
     async function fetchQuestions() {
       try {
@@ -16,18 +15,15 @@ export default function ListeningContent({ topic }) {
         setError("");
         setQuestions([]);
 
-        const res = await fetch("/api/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic }),
-        });
+        // ✅ 呼叫正確 API
+        const res = await fetch(`/api/questions?topic=${encodeURIComponent(topic)}`);
 
         if (!res.ok) {
           throw new Error("題目載入失敗");
         }
 
         const data = await res.json();
-        setQuestions(data.questions || []); // 確保有 questions 陣列
+        setQuestions(data || []); // 確保是陣列
       } catch (err) {
         setError(err.message || "發生錯誤");
       } finally {
@@ -95,8 +91,8 @@ export default function ListeningContent({ topic }) {
                     border: "1px solid #999",
                     backgroundColor: isSelected
                       ? isCorrect
-                        ? "#c8e6c9" // 綠色 (答對)
-                        : "#ffcdd2" // 紅色 (答錯)
+                        ? "#c8e6c9"
+                        : "#ffcdd2"
                       : "white",
                   }}
                 >
