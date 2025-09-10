@@ -1,109 +1,72 @@
-"use client";
+import OpenAI from "openai";
 
-import { useEffect, useState } from "react";
+export async function GET(req) {
+  try {
+    const url = new URL(req.url);
+    const topic = url.searchParams.get("topic") || "多益";
+    const part = url.searchParams.get("part") || "1"; // 新增：控制要載入哪個 Part
 
-export default function ListeningContent({ topic }) {
-  const [part, setPart] = useState(1); // 目前題組
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [cache, setCache] = useState({}); // 預備題目快取
-  const [currentIndex, setCurrentIndex] = useState(0);
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY, // server-side 使用
+    });
 
-  // 載入題目
-  const loadQuestions = async (targetPart) => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, part: targetPart }),
-      });
+    const today = new Date().toISOString().split("T")[0];
 
-      const data = await res.json();
-      if (data?.questions) {
-        setQuestions(data.questions);
-        setCurrentIndex(0);
-      } else {
-        setQuestions([]);
-      }
-    } catch (err) {
-      console.error("題目載入失敗", err);
-      setQuestions([]);
-    }
-    setLoading(false);
-  };
+    // 每個 Part 的題數 (這裡先給小題數，測試穩定後再放大)
+    const partConfig = {
+      1: { name: "照片題", count: 5 },
+      2: { name: "問答題", count: 5 },
+      3: { name: "對話理解", count: 5 },
+      4: { name: "短獨白理解", count: 5 },
+    };
 
-  // 初始載入 Part 1
-  useEffect(() => {
-    loadQuestions(1);
-  }, [topic]);
+    const { name, count } = partConfig[part] || { name: "一般題目", count: 5 };
 
-  // 預先載入下一個 Part
-  const preloadNextPart = async () => {
-    if (part < 4 && !cache[part + 1]) {
-      try {
-        const res = await fetch("/api/questions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic, part: part + 1 }),
-        });
-        const data = await res.json();
-        if (data?.questions) {
-          setCache((prev) => ({ ...prev, [part + 1]: data.questions }));
-        }
-      } catch (err) {
-        console.error("預載下一組題目失敗", err);
-      }
-    }
-  };
-
-  // 使用者選答案
-  const handleAnswer = () => {
-    const nextIndex = currentIndex + 1;
-
-    // 如果答到一半，就偷偷預載下一組題目
-    if (nextIndex >= Math.floor(questions.length / 2)) {
-      preloadNextPart();
-    }
-
-    if (nextIndex < questions.length) {
-      setCurrentIndex(nextIndex);
+    let systemPrompt = "";
+    if (topic === "多益") {
+      systemPrompt = `
+你是一個TOEIC出題老師，請生成 Part ${part} (${name}) 題目 ${count} 題。
+輸出 JSON 陣列，每題包含：
+- id
+- question (題目文字或對話)
+- options (選項，至少 3 個)
+- answer (正確答案)
+照片題請用 placeholder 圖片 URL。
+`;
+    } else if (topic === "英檢" || topic === "雅思") {
+      systemPrompt = `
+你是一個英語老師，生成考試聽力 Part ${part} 題目 ${count} 題。
+輸出 JSON 陣列，每題包含 id, question, options, answer。
+`;
     } else {
-      // 換下一組題目
-      if (part < 4) {
-        const nextPart = part + 1;
-        setPart(nextPart);
-
-        if (cache[nextPart]) {
-          // 用快取的題目
-          setQuestions(cache[nextPart]);
-          setCurrentIndex(0);
-        } else {
-          // 沒快取就直接載入
-          loadQuestions(nextPart);
-        }
-      } else {
-        alert("🎉 所有題目完成了！");
-      }
+      systemPrompt = `
+你是一個英語老師，生成日常生活會話 Part ${part} 題目 ${count} 題。
+輸出 JSON 陣列，每題包含 id, question, options, answer。
+`;
     }
-  };
 
-  if (loading) return <p>題目載入中...</p>;
-  if (!questions.length) return <p>題目載入失敗</p>;
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: 今天日期是 ${today}，請生成題目 },
+      ],
+    });
 
-  const currentQuestion = questions[currentIndex];
+    let data;
+    try {
+      data = JSON.parse(response.choices[0].message.content);
+    } catch (err) {
+      console.error("JSON 解析失敗", err);
+      data = [];
+    }
 
-  return (
-    <div>
-      <h2>Part {part} - 第 {currentIndex + 1} 題</h2>
-      <p>{currentQuestion?.question || "（題目文字）"}</p>
-      <ul>
-        {currentQuestion?.options?.map((opt, i) => (
-          <li key={i}>
-            <button onClick={handleAnswer}>{opt}</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return new Response(JSON.stringify({ part, questions: data }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: "題目生成失敗" }), { status: 500 });
+  }
 }
