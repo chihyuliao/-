@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import OpenAI from "openai";
+import { useEffect, useState } from "react";
 
 export default function ListeningContent({ topic }) {
   const [questions, setQuestions] = useState([]);
@@ -10,35 +9,11 @@ export default function ListeningContent({ topic }) {
     async function fetchQuestions() {
       setLoading(true);
       try {
-        const client = new OpenAI({
-          apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-        });
-
-        const today = new Date().toISOString().split("T")[0];
-
-        let systemPrompt = "";
-        if (topic === "多益") {
-          systemPrompt = `
-你是一個TOEIC出題老師，生成完整聽力題庫250題：
-Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理解。
-輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。照片題請使用 placeholder 圖片URL。題目不重複。
-`;
-        } else {
-          systemPrompt = `你是一個英語老師，生成日常生活會話聽力題目，輸出JSON格式，每題包含id, 題目文字或對話, 選項, 正確答案。`;
-        }
-
-        const response = await client.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `今天日期是 ${today}，生成今天的題目` },
-          ],
-        });
-
-        const data = JSON.parse(response.choices[0].message.content);
+        const res = await fetch(`/api/listening?topic=${topic}`);
+        const data = await res.json();
         setQuestions(data);
-      } catch (error) {
-        console.error("題目生成錯誤:", error);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -50,7 +25,7 @@ Part1=15照片題, Part2=63問答題, Part3=78對話理解, Part4=94短獨白理
   if (loading) return <p>題目生成中，請稍候...</p>;
 
   return (
-    <div style={{ textAlign: "left", maxWidth: "900px", margin: "0 auto" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "left" }}>
       {Object.keys(questions).map((part) =>
         questions[part] ? (
           <div key={part}>
